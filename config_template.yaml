@@ -1,0 +1,4 @@
+hugging_face_token:
+  HUGGING_FACE_TOKEN
+api_url:
+  https://api-inference.huggingface.co/models/facebook/bart-large-cnn
