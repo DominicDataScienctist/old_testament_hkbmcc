@@ -1,4 +1,6 @@
 import argparse
+
+import numpy as np
 import requests
 
 import pandas as pd
@@ -33,13 +35,14 @@ def get_connection_config(token):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task', choices=['acquisition', 'export', 'summarize'], default='export')
+    parser.add_argument('--task', choices=['acquisition', 'export', 'summarize', 'index'], default='export')
     parser.add_argument('--bible_url', type=str, default='https://bereanbible.com/bsb.txt')
     parser.add_argument('--data_dir', type=str, default='data')
     parser.add_argument('--tfidf_fn', type=str, default='tfidf_df.pkl')
     parser.add_argument('--df_vocab_fn', type=str, default='df_vocab.pkl')
     parser.add_argument('--df_fn', type=str, default='original_data.pkl')
     parser.add_argument('--config', type=str, default='config.yaml')
+    # parser.add_argument('index_chapter', type=str, default='chap')
     args = parser.parse_args()
     task = args.task
 
@@ -72,4 +75,11 @@ if __name__ == "__main__":
         haggai = str(df_book.loc[df_book['book'] == 'Haggai'].text.values[0])
         api_url = config['api_url']
         headers = get_connection_config(token)
-        output = query({"inputs": haggai}, api_url=api_url, headers=headers)
+        output = query({"inputs": haggai, "max_length":5}, api_url=api_url, headers=headers)
+        print(output)
+
+    elif task == 'index':
+        df_fn = args.df_fn
+        df = pd.read_pickle(f"data/{df_fn}")
+        print(np.unique(df['book']))
+

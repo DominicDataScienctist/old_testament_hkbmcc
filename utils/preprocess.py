@@ -66,6 +66,12 @@ def acquire_data(data_dir, bible_url, tfidf_fn, df_vocab_fn, df_fn):
     bible_array = np.array([item.split('\t') for item in bible_list])
     bible_array[:, 1] = np.array([printable_string(verse) for verse in bible_array[:, 1]])
     df = pd.DataFrame(bible_array[3:, :], columns=['reference','text'])
+    chapters = np.unique([r.split(' ')[0] for r in df['reference'].values], sorted=False)
+    for c in chapters:
+        print(c)
+    raise IOError
+    df.to_csv('data/temp.csv')
+    raise ValueError
     df['chapter'] = df['reference'].apply(chapter_split)
     df['verse'] = df['reference'].apply(verse_split)
     df['book'] = df['reference'].apply(book_split)
